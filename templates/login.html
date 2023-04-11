@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet">
+    <title>Login</title>
+    <style>
+        body {
+            background-color: #ffefd7;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 5% auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container login-container">
+        {% if attempts %}
+        <div class="text-center">
+            <p>You have {{ attempts }} attempts left.</p>
+        </div>
+        {% endif %}
+        <form name="loginform" id="loginform" method="post" accept-charset="UTF-8">
+            <input type="hidden" name="returnto" value="/" />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" name="email" id="email" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" name="password" id="password" maxlength="255" class="form-control" />
+            </div>
+            <div class="text-end">
+                <input type="submit" name="login" value="Log In!" class="btn btn-primary" />
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <a href="/register" class="btn btn-outline-primary">Register</a>
+            <a href="/recover" class="btn btn-link">Recover account</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

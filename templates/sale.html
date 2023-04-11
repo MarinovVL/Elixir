@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sale</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffefd7;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-top: 2rem;
+            padding-left: 2rem;
+            padding-right: 320px; /* Add this to prevent overlapping with the buttons */
+            margin: 0;
+            height: 100vh;
+        }
+
+        .input-container {
+            margin-bottom: 4rem;
+        }
+
+        .input-container input {
+            margin-right: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .button-container {
+            position: absolute;
+            top: 10rem; /* Adjust this value to move the buttons lower */
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+
+        .button-container button {
+            background-color: #3da4ab;
+            color: white;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .button-container #ok-button {
+            margin-bottom: 2rem; /* Add this to separate the OK button from the other ones */
+        }
+
+
+        .medicines-list {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Set the width of the container */
+            max-width: 100%; /* Prevent the container from overflowing */
+
+        }
+
+        .icon-container {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            background-color: #ffefd7;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .icon-sales {
+            color: #3da4ab;
+        }
+
+        .icon-label {
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Column widths */
+        .col-no {
+            width: 5%; /* Super small */
+        }
+
+        .col-name {
+            width: 60%; /* Biggest */
+        }
+
+        .col-quantity {
+            width: 10%; /* Super small */
+        }
+
+        .col-price {
+            width: 10%; /* Super small */
+        }
+
+        .col-sum {
+            width: 15%; /* Small */
+        }
+
+        .col-del {
+            width: 10%; /* Small */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <label for="barcode">Barcode:</label>
+        <input type="text" id="barcode" name="barcode">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+    </div>
+
+
+    <div class="button-container">
+        <button type="button" id="ok-button">OK</button>
+        <button type="button" id="brakuvane-button">Бракуване</button>
+        <button type="button" id="lipsi-button">Липси</button>
+        <button type="button" id="darenie-button">Дарение</button>
+        <button type="button" id="vrashtane-button">Връщане към доставчик</button>
+        <button type="button" id="blokirane-button">Блокиране на ЛП</button>
+    </div>
+
+
+    <div class="icon-container">
+    <i class="icon icon-sales fas fa-hand-holding-medical fa-2x"></i>
+    <span class="icon-label">Продажби</span>
+    </div>
+
+    <div class="medicines-list">
+        <h3>Medicine Names:</h3>
+        <table id="medicineTable" class="display">
+            <thead>
+                <tr>
+                    <th class="col-no">No</th>
+                    <th class="col-name">Име</th>
+                    <th class="col-quantity">к-во</th>
+                    <th class="col-price">ед. цена</th>
+                    <th class="col-sum">сума</th>
+                    <th class="col-sum">del</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Add table rows with data here -->
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#medicineTable').DataTable();
+        });
+
+        let medicineCounter = 1;
+
+        function renumberRows() {
+            var table = $("#medicineTable").DataTable();
+            table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var data = this.data();
+                data[0] = rowIdx + 1;
+                this.invalidate();
+            });
+            table.draw();
+            medicineCounter = table.rows().count() + 1; // Update medicineCounter
+        }
+
+        $("#medicineTable").on("click", ".delete-row", function () {
+            var table = $("#medicineTable").DataTable();
+            table.row($(this).closest("tr")).remove().draw();
+            renumberRows(); // Update row numbers after deletion
+        });
+    </script>
+
+    <script>
+        // Barcode input
+        $(document).ready(function () {
+            $("#barcode").on("keypress", function (e) {
+                if (e.keyCode === 13) {
+                    var barcode = $("#barcode").val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/search_barcode",
+                        contentType: "application/json",
+                        data: JSON.stringify({ barcode: barcode }),
+                        success: function (response) {
+                            if (response.success) {
+                                var medicine_name = response.medicine_name;
+                                // Add a new row to the DataTable with the medicine_name
+                                $("#medicineTable").DataTable().row.add([
+                                    medicineCounter,
+                                    medicine_name,
+                                    'Not yet set', // к-во
+                                    'Not yet set', // ед. цена
+                                    'Not yet set',  // сума
+                                    '<button class="delete-row">Delete</button>', //delete button
+                                ]).draw();
+
+                                medicineCounter++;
+
+                                // Clear the barcode input field
+                                $("#barcode").val("");
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred. Please try again.");
+                        },
+                    });
+                }
+            });
+        });
+
+        // Name input
+        $("#name").autocomplete({
+            minLength: 2,
+            source: function (request, response) {
+                $.ajax({
+                    type: "POST",
+                    url: "/search_medicine_name",
+                    contentType: "application/json",
+                    data: JSON.stringify({ name: request.term }),
+                    success: function (data) {
+                        var medicine_names = data.map(function (item) {
+                            return item.medicine_name;
+                        });
+                        response(medicine_names);
+                    },
+                    error: function () {
+                        alert("An error occurred. Please try again.");
+                    },
+                });
+            },
+            select: function (event, ui) {
+                // Add a new row to the DataTable with the selected medicine_name
+                $("#medicineTable").DataTable().row.add([
+                    medicineCounter,
+                    ui.item.value,
+                    'Not yet set', // к-во
+                    'Not yet set', // ед. цена
+                    'Not yet set',  // сума
+                    '<button class="delete-row">Delete</button>', //delete button
+                ]).draw();
+
+                medicineCounter++;
+
+                // Clear the name input field
+                $("#name").val("");
+                return false;
+            },
+        });
+</script>
+
+    <script>
+        $("#medicineTable").on("click", ".delete-row", function () {
+            var table = $("#medicineTable").DataTable();
+            table.row($(this).closest("tr")).remove().draw();
+        });
+    </script>
+</body>
+</html>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffefd7;
+            display: flex;
+            flex-direction: column;
+            padding-top: 2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            margin: 0;
+        }
+
+        .input-container {
+            margin-bottom: 4rem;
+        }
+
+        .input-container input {
+            margin-right: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .input-container button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .icon-container {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            background-color: #ffefd7;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .icon-purchase {
+            color: #f6cd61;
+        }
+
+        .icon-label {
+            margin-left: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .input-container div:first-child {
+            margin-bottom: 1rem;
+        }
+
+        table {
+        width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="input-container">
+        <div>
+            <label for="barcode">Barcode:</label>
+            <input type="text" id="barcode" name="barcode">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <button type="button" id="ok-button">OK</button>
+        </div>
+        <div>
+            <label for="file-input">Избери файл:</label>
+            <input type="file" id="file-input" name="file-input">
+            <button type="button" id="read-button">Прочети</button>
+            <button type="button" id="load-button">Зареди</button>
+        </div>
+    </div>
+
+    <div class="icon-container">
+    <i class="icon icon-purchase fas fa-pills fa-2x"></i>
+    <span class="icon-label">Покупки</span>
+    </div>
+    <div id="table-container"></div>
+
+
+    <script>
+    document.getElementById("read-button").addEventListener("click", function () {
+        const input = document.getElementById("file-input");
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const uint8Array = new Uint8Array(e.target.result);
+                const data = new TextDecoder("utf-8").decode(uint8Array);
+                const csvData = CSVToArray(data);
+                createDataTable(csvData);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    });
+
+    function CSVToArray(strData) {
+        const rows = strData.trim().split(/\r?\n/);
+        return rows.map(row => {
+            const columns = row.split(/\t/);
+            return [columns[0], columns[1], columns[2], columns[6], columns[7], columns[9]];
+        });
+    }
+
+
+    function createDataTable(csvData) {
+        const tableContainer = document.getElementById("table-container");
+
+        const table = document.createElement("table");
+        table.setAttribute("id", "csvDataTable");
+
+        const thead = document.createElement("thead");
+
+        const headerLabels =
+            ["Стинг код", "име", "бр.", "годно до", "лот номер", "цена"];
+        const headerRow = document.createElement("tr");
+        headerLabels.forEach(header => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        for (let i = 1; i < csvData.length; i++) {
+            const row = document.createElement("tr");
+            csvData[i].forEach(cell => {
+                const td = document.createElement("td");
+                td.textContent = cell;
+                row.appendChild(td);
+            });
+            tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+
+        tableContainer.innerHTML = "";
+        tableContainer.appendChild(table);
+
+        $("#csvDataTable").DataTable({
+            // DataTables options go here, e.g.:
+            // paging: false
+        });
+    }
+    </script>
+
+</body>
+</html>

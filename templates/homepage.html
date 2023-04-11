@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha3/css/bootstrap.min.css" integrity="sha384-cb/1xIUMIAwMpFcuU4p4gOQSZ4IVSjYNb4V4N9t3uL7New/TMQeO/YfPj2IzUpgk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha3/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9W8xN2" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffefd7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 1rem;
+            width: 200px;
+            height: 200px;
+            transition: transform 0.3s;
+        }
+
+        .icon-container:hover {
+            transform: scale(1.1);
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-sales {
+            color: #3da4ab;
+        }
+
+        .icon-purchase {
+            color: #f6cd61;
+        }
+
+        .icon-sespa {
+            color: #fe8a71;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <a href="/sale" class="icon-container">
+        <i class="icon icon-sales fa-solid fa-hand-holding-medical"></i>
+        <h3>Продажби</h3>
+    </a>
+
+    <a href="/purchase" class="icon-container">
+        <i class="icon icon-purchase fas fa-pills"></i>
+        <h3>Покупки</h3>
+    </a>
+
+    <a href="#" class="icon-container">
+        <i class="icon icon-sespa fa-solid fa-prescription"></i>
+        <h3>SESPA</h3>
+    </a>
+</body>
+</html>

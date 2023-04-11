@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha3/css/bootstrap.min.css" integrity="sha384-cb/1xIUMIAwMpFcuU4p4gOQSZ4IVSjYNb4V4N9t3uL7New/TMQeO/YfPj2IzUpgk" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0-alpha3/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kD4Ck5BdPtF+to8xMp9W8xN2" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5dc;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-custom {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 150px;
+            text-decoration: none;
+            text-align: center;
+            border-radius: .25rem;
+        }
+
+        .btn-login {
+            background-color: #2ecc71;
+            border: none;
+            color: white;
+        }
+
+        .btn-register {
+            background-color: #3498db;
+            border: none;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <a href="{{ url_for('login') }}" class="btn-custom btn-login">
+            <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+        </a>
+        <a href="{{ url_for('register') }}" class="btn-custom btn-register">
+            <i class="fa fa-user-plus" aria-hidden="true"></i> Register
+        </a>
+    </div>
+</body>
+</html>
+
